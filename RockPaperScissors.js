@@ -1,26 +1,31 @@
 var rpsWords = ["rock", "paper", "scissors"];
 var setWinner = [[0,1,1],[0,2,0],[1,0,0],[1,2,1],[2,1,0],[2,0,1]];
+// in third array element: 1 = cpu won 0 = player won
+// [players][cpu][winner]
 var scoreKeeper = [0,0];
+
+main();
 
 function main(){
 	var outOf = parseInt(prompt("Best out of? "));
 	for(var turn=0; turn<outOf; turn++){
-		userTurn();
+		var pChoice = userTurn();
 		if(pChoice == "q"){
 			turn=outOf;
 		}
 		else{
-			cpuTurn();
+			var cChoice = cpuTurn();
 			if(pChoice == cChoice){
 				alert("We both chose "+cChoice);
 				turn--;
 			}
 			else{
-				turnWinner();
-				updateScore();
+				var winner = turnWinner(pChoice, cChoice);
+				updateScore(winner);
 			}
 		}
 	}
+	gameWinner();
 }
 
 function userTurn(){
@@ -34,13 +39,25 @@ function cpuTurn(){
 }
 
 function turnWinner(userTurn,cpuTurn){
-	for()
+	for(var index = 0; index < 6; index++){
+		if(userTurn == setWinner[index][0] && cpuTurn == setWinner[index][1]){
+			let winner = setWinner[index][2];
+			alert(setWinner[index][2] + " won!");
+			return winner;
+		}
+	}
 }
 
-function updateScore(){
-	
+function updateScore(winner){
+	scoreKeeper[winner]++;
+	alert(scoreKeeper);
 }
 
 function gameWinner(){
-	
+	if(scoreKeeper[0]>scoreKeeper[1]){
+		alert("The winner is the player!");
+	}
+	else{
+		alert("The winner is the CPU!");
+	}
 }
