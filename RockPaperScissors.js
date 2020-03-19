@@ -1,9 +1,9 @@
 var rpsWords = ["rock", "paper", "scissors"];
-var setWinner = [[0,1,1],[0,2,0],[1,0,0],[1,2,1],[2,1,0],[2,0,1]];
+var setWinner = [[0,1,1,"I"],[0,2,0,"You"],[1,0,0,"You"],[1,2,1,"I"],[2,1,0,"You"],[2,0,1,"I"]];
 // in third array element: 1 = cpu won 0 = player won
 // [players][cpu][winner]
 var scoreKeeper = [0,0];
-
+var winner = -1;
 main();
 
 function main(){
@@ -16,7 +16,7 @@ function main(){
 		else{
 			var cChoice = cpuTurn();
 			if(pChoice == cChoice){
-				alert("We both chose "+cChoice);
+				alert("We both chose "+letter2Number(cChoice));
 				turn--;
 			}
 			else{
@@ -29,27 +29,45 @@ function main(){
 }
 
 function userTurn(){
-	var pChoice = parseInt(prompt("choose either 0(rock), 1(paper) or 2(scissors): "));
-	return pChoice;
+	var pChoice = parseInt(prompt("choose either r(rock), p(paper) or s(scissors): "));
+	turnNumber = letter2Number(pChoice);
+	if(turnNumber==-1){
+		alert(“bad guess. Choose either r(Rock), p(Paper), s(scissors): ”);
+		userTurn();
+		
+	}
+	else return pChoice;
+}
+
+function letter2Number(turnLetter){
+	var turnNumber = -1;
+	for(i = 0; i < rpsWords.length; i++){
+		if(turnLetter==rpsWords[i][0]) turnNumber = i;
+	}
+	return turnNumber;
 }
 
 function cpuTurn(){
 	var cChoice = Math.floor(Math.random()*3);
+	alert("I choose "+rpsWords[cChoice][0]+".")
 	return cChoice;
 }
 
 function turnWinner(userTurn,cpuTurn){
-	for(var index = 0; index < 6; index++){
+	for(var index = 0; index < setWinner.length; index++){
 		if(userTurn == setWinner[index][0] && cpuTurn == setWinner[index][1]){
-			let winner = setWinner[index][2];
-			alert(setWinner[index][2] + " won!");
-			return winner;
+			winner = setWinner[index][2];
+			alert("You picked "+rpsWords[userTurn]+" and I picked "+rpsWords[cpuTurn]+".");
+			alert(setWinner[index][3] + " won!");
+			
 		}
 	}
+	return winner;
 }
 
 function updateScore(winner){
-	scoreKeeper[winner]++;
+	//scoreKeeper[winner]++;
+	scoreKeeper[winner]=scoreKeeper[winner]+1;
 	alert(scoreKeeper);
 }
 
